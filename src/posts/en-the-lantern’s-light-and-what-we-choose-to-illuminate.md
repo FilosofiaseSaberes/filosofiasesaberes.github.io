@@ -15,7 +15,7 @@ gallery:
 abnt: ''
 ---
 
-o illuminate something is also to choose what will remain in shadow.
+To illuminate something is also to choose what will remain in shadow.
 
 > _`Lighting a lantern in the dark means, first and foremost, deciding where to look and, therefore, what will remain outside the illuminated circle. No worldview sees everything. Every form of knowledge illuminates one corner while casting another into half-light.`_
 
