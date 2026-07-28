@@ -20,9 +20,9 @@ eleventyExcludeFromCollections: true
 </div>
 
 {% if posts.length %}
-<div class="grid">
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,340px));justify-content:start;background:transparent;border:none;gap:16px">
   {% for post in posts %}
-  <article class="card" tabindex="0">
+  <article class="card" tabindex="0" style="border:1px solid var(--line);border-radius:10px">
     {{ catTag(post.data.category, site.categories[post.data.category][sec.lang], post.date | shortdate(sec.lang)) }}
     <h4><a href="{{ post.url | url }}">{{ post.data.title }}</a></h4>
     <p>{{ post.data.excerpt }}</p>
