@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Moderação · Filosofias e Saberes</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Spectral:wght@300;400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--void:#12131F;--raised:#1A1B2B;--line:#2A2E40;--white:#EFEADD;--muted:#A19CB3;--gold:#E4B84E;--turq:#3FBFB4;--red:#D2694F;--moss:#9DB06B}
+  *{box-sizing:border-box;margin:0}body{background:var(--void);color:var(--white);font-family:"Spectral",serif;font-weight:300;line-height:1.6;padding:28px 20px;max-width:760px;margin:0 auto}
+  h1{font-family:"Cinzel",serif;font-weight:600;font-size:20px;letter-spacing:.1em;color:var(--gold);margin-bottom:4px}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:24px}
+  label{display:block;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:12px 0 6px}
+  input{width:100%;background:var(--raised);border:1px solid var(--line);border-radius:6px;color:var(--white);font-family:"IBM Plex Mono",monospace;font-size:13px;padding:10px 12px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:20px}
+  .row>div{flex:1;min-width:220px}
+  button{font-family:"Cinzel",serif;font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;border:none;border-radius:6px;padding:11px 16px;cursor:pointer}
+  .btn-load{background:var(--gold);color:#12131F}
+  .btn-ok{background:var(--moss);color:#12131F} .btn-no{background:transparent;color:var(--red);border:1px solid var(--red)}
+  .msg{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--turq);margin:10px 0 20px;min-height:1em}
+  .item{background:var(--raised);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+  .who{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+  .name{font-family:"Cinzel",serif;font-size:13px;color:var(--gold)}
+  .idtag{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--turq);border:1px solid var(--turq);border-radius:20px;padding:2px 9px}
+  .slug{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);margin-left:auto}
+  .txt{font-size:15px;white-space:pre-wrap;margin-bottom:12px}
+  .acts{display:flex;gap:10px}
+  .empty{color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:12px;padding:10px 0}
+</style>
+</head>
+<body>
+  <h1>Moderação</h1>
+  <p class="sub">Aprove ou recuse os comentários pendentes. Suas credenciais ficam só neste navegador.</p>
+  <div class="row">
+    <div><label for="url">URL do Worker</label><input id="url" placeholder="https://...workers.dev"></div>
+    <div><label for="tok">Senha de moderação</label><input id="tok" type="password" placeholder="ADMIN_TOKEN"></div>
+    <div style="flex:0"><button class="btn-load" id="load">Carregar pendentes</button></div>
+  </div>
+  <p class="msg" id="msg"></p>
+  <div id="list"></div>
+<script>
+  var $=function(s){return document.querySelector(s)};
+  try{ $('#url').value=localStorage.getItem('fes-mod-url')||''; $('#tok').value=localStorage.getItem('fes-mod-tok')||''; }catch(e){}
+  function api(){ return ($('#url').value||'').replace(/\/+$/,''); }
+  function tok(){ return $('#tok').value||''; }
+  function esc(s){var d=document.createElement('div');d.textContent=s==null?'':s;return d.innerHTML;}
+  function save(){ try{localStorage.setItem('fes-mod-url',$('#url').value);localStorage.setItem('fes-mod-tok',$('#tok').value);}catch(e){} }
+  function call(action, extra){
+    return fetch(api()+'/admin',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(Object.assign({token:tok(),action:action},extra||{}))}).then(function(r){
+        if(r.status===401) throw new Error('Senha incorreta.'); return r.json(); });
+  }
+  function load(){
+    save(); $('#msg').textContent='Carregando…'; $('#list').innerHTML='';
+    call('list').then(function(d){
+      var items=d.pending||[];
+      $('#msg').textContent = items.length? (items.length+' pendente(s).') : '';
+      if(!items.length){ $('#list').innerHTML='<p class="empty">Nada pendente. \u2727</p>'; return; }
+      $('#list').innerHTML=items.map(function(c){
+        return '<div class="item" data-id="'+c.id+'"><div class="who">'
+          +'<span class="name">'+(esc(c.name)||'\u2014')+'</span>'
+          +(c.ident?'<span class="idtag">'+esc(c.ident)+'</span>':'')
+          +'<span class="slug">'+esc(c.slug)+'</span></div>'
+          +'<div class="txt">'+esc(c.text)+'</div>'
+          +'<div class="acts"><button class="btn-ok" data-a="approve">Aprovar</button>'
+          +'<button class="btn-no" data-a="reject">Recusar</button></div></div>';
+      }).join('');
+    }).catch(function(e){ $('#msg').textContent=e.message||'Erro.'; });
+  }
+  $('#load').addEventListener('click',load);
+  $('#list').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-a]'); if(!b) return;
+    var item=b.closest('.item'); var id=item.dataset.id; b.disabled=true;
+    call(b.dataset.a,{id:id}).then(function(){ item.remove(); if(!$('#list').children.length) $('#list').innerHTML='<p class="empty">Nada pendente. \u2727</p>'; })
+      .catch(function(e){ $('#msg').textContent=e.message||'Erro.'; b.disabled=false; });
+  });
+</script>
+</body>
+</html>

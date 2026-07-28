@@ -1,0 +1,24 @@
+{# ícones de categoria (contorno) #}
+{% macro catIconSvg(cat) %}
+{%- if cat=="ensaios" -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 20l3-1 11-11-2-2L5 17l-1 3z" stroke-linejoin="round"/><path d="M14 6l2 2"/></svg>
+{%- elif cat=="academico" -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 6l8-3 8 3-8 3-8-3z" stroke-linejoin="round"/><path d="M6 8v5c0 1.5 12 1.5 12 0V8" stroke-linejoin="round"/></svg>
+{%- else -%}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 21c-4-3-7-7-7-11a7 7 0 0 1 14 0c0 4-3 8-7 11z" stroke-linejoin="round"/><path d="M12 13c0-3 0-5 0-7"/></svg>{%- endif -%}
+{% endmacro %}
+
+{% set catColors = {ensaios:"#E4B84E", academico:"#3FBFB4", pessoal:"#9DB06B"} %}
+
+{# etiqueta de categoria: ícone + rótulo (cor nunca é o único sinal) #}
+{% macro catTag(cat, label, extra="") %}
+<span class="tag-cat" style="color:{{ catColors[cat] }}">{{ catIconSvg(cat) }}{{ label }}{% if extra %} · {{ extra }}{% endif %}</span>
+{% endmacro %}
+
+{# formato: FORMA distinta (círculo/quadrado/triângulo/losango) + cor + texto #}
+{% macro fmtTag(fmt, label) %}
+{%- set shapes = {
+  texto:'<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="var(--white)"/></svg>',
+  pdf:'<svg viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="1.5" width="9" height="9" rx="1" fill="var(--moss)"/></svg>',
+  video:'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1l5 9H1z" fill="var(--purple)"/></svg>',
+  imagem:'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1l5 5-5 5-5-5z" fill="var(--gold)"/></svg>'
+} -%}
+<span class="fmt">{{ shapes[fmt] | safe }}{{ label }}</span>
+{% endmacro %}

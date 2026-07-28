@@ -1,0 +1,37 @@
+---
+pagination:
+  data: sections
+  size: 1
+  alias: sec
+permalink: "{{ sec.home }}secao/{{ sec.cat }}/index.html"
+eleventyExcludeFromCollections: true
+---
+{% from "macros.njk" import catTag, fmtTag %}
+{% set L = i18n[sec.lang] %}
+{% set posts = collections["posts_" + sec.lang] | inSection(sec.cat) %}
+{% set catLabel = site.categories[sec.cat][sec.lang] %}
+{% set fmtLabels = {
+  texto:{pt:"Texto",es:"Texto",en:"Text"}, pdf:{pt:"PDF",es:"PDF",en:"PDF"},
+  video:{pt:"Vídeo",es:"Video",en:"Video"}, imagem:{pt:"Imagens",es:"Imágenes",en:"Images"} } %}
+
+<div class="section-head">
+  <h1 class="section-title">{{ catTag(sec.cat, catLabel) }}</h1>
+  <span class="eyebrow">{{ L.section_in }}</span>
+</div>
+
+{% if posts.length %}
+<div class="grid">
+  {% for post in posts %}
+  <article class="card" tabindex="0">
+    {{ catTag(post.data.category, site.categories[post.data.category][sec.lang], post.date | shortdate(sec.lang)) }}
+    <h4><a href="{{ post.url | url }}">{{ post.data.title }}</a></h4>
+    <p>{{ post.data.excerpt }}</p>
+    <div class="foot">{{ fmtTag(post.data.format, fmtLabels[post.data.format][sec.lang]) }}</div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<p class="issue-line eyebrow" style="border:none">{{ L.empty }}</p>
+{% endif %}
+
+<a class="backlink" href="{{ L.home | url }}">← {{ site.title }}</a>

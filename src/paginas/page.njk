@@ -1,0 +1,14 @@
+---
+pagination:
+  data: pages
+  size: 1
+  alias: pg
+permalink: "{{ pg.home }}{{ pg.slug }}/index.html"
+eleventyExcludeFromCollections: true
+---
+{% set L = i18n[pg.lang] %}
+<article class="post staticpage">
+  <h1>{{ pg.title }}</h1>
+  <div class="body">{{ pg.body | safe }}</div>
+  <a class="backlink" href="{{ L.home | url }}">← {{ site.title }}</a>
+</article>

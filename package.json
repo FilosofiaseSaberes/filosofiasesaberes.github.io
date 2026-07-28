@@ -1,0 +1,13 @@
+{
+  "name": "filosofias-e-saberes",
+  "version": "1.0.0",
+  "description": "Periódico trilíngue de filosofias e saberes — acessível e inclusivo.",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

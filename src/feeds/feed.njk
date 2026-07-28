@@ -1,0 +1,32 @@
+---
+pagination:
+  data: site.langs
+  size: 1
+  alias: flang
+permalink: "{% if flang == 'pt' %}/feed.xml{% else %}/{{ flang }}/feed.xml{% endif %}"
+eleventyExcludeFromCollections: true
+---
+{%- set home = '/' if flang == 'pt' else '/' + flang + '/' -%}
+{%- set posts = collections['posts_' + flang] -%}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="{{ flang }}">
+  <title>{{ site.title }}</title>
+  <subtitle>{{ i18n[flang].tagline }}</subtitle>
+  <link href="{{ site.url }}{{ page.url | url }}" rel="self"/>
+  <link href="{{ site.url }}{{ home | url }}"/>
+  <id>{{ site.url }}{{ home | url }}</id>
+  {%- if posts.length %}
+  <updated>{{ posts[0].date | isoDate }}</updated>
+  {%- else %}
+  <updated>{{ page.date | isoDate }}</updated>
+  {%- endif %}
+  {%- for post in posts %}
+  <entry>
+    <title>{{ post.data.title }}</title>
+    <link href="{{ site.url }}{{ post.url | url }}"/>
+    <id>{{ site.url }}{{ post.url | url }}</id>
+    <updated>{{ post.date | isoDate }}</updated>
+    <summary>{{ post.data.excerpt }}</summary>
+  </entry>
+  {%- endfor %}
+</feed>

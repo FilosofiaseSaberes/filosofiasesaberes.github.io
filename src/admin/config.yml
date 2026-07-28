@@ -1,0 +1,71 @@
+# Painel de publicação — Sveltia CMS
+backend:
+  name: github
+  repo: FilosofiaseSaberes/filosofiasesaberes.github.io
+  branch: main
+  base_url: https://SEU-WORKER.workers.dev  # << URL do autenticador (Cloudflare) — ver GUIA.md
+
+media_folder: "src/uploads"     # onde os arquivos ficam no repositório
+public_folder: "/uploads"       # como aparecem no site
+
+# Observação: o idioma de cada publicação é escolhido no campo "Idioma" abaixo,
+# por isso não usamos o sistema de locales do painel.
+
+collections:
+  - name: posts
+    label: "Publicações"
+    label_singular: "Publicação"
+    folder: "src/posts"
+    create: true
+    slug: "{{fields.lang}}-{{slug}}"
+    preview_path: "posts/{{slug}}"
+    fields:
+      - { name: title, label: "Título", widget: string }
+      - name: lang
+        label: "Idioma"
+        widget: select
+        default: pt
+        options:
+          - { label: "Português", value: pt }
+          - { label: "Español", value: es }
+          - { label: "English", value: en }
+      - { name: date, label: "Data", widget: datetime, format: "YYYY-MM-DD", date_format: "DD/MM/YYYY", time_format: false }
+      - name: category
+        label: "Seção"
+        widget: select
+        options:
+          - { label: "Ensaios", value: ensaios }
+          - { label: "Acadêmico", value: academico }
+          - { label: "Pessoal", value: pessoal }
+      - name: format
+        label: "Formato"
+        widget: select
+        options:
+          - { label: "Texto", value: texto }
+          - { label: "PDF", value: pdf }
+          - { label: "Vídeo (com legendas)", value: video }
+          - { label: "Imagens (com descrição)", value: imagem }
+      - { name: excerpt, label: "Resumo (aparece na capa)", widget: text }
+
+      # PDF
+      - { name: pdf, label: "Arquivo PDF", widget: file, required: false, hint: "Use quando o formato for PDF." }
+
+      # Vídeo — legenda/transcrição incentivadas para acessibilidade
+      - { name: video, label: "Link do vídeo (incorporar)", widget: string, required: false, hint: "URL de incorporação do YouTube/Vimeo. Publique o vídeo com legendas." }
+      - { name: transcript, label: "Transcrição do vídeo/áudio", widget: text, required: false, hint: "Importante para pessoas surdas e para quem prefere ler." }
+
+      # Galeria — texto alternativo OBRIGATÓRIO (acessibilidade para pessoas cegas)
+      - name: gallery
+        label: "Galeria de imagens"
+        widget: list
+        required: false
+        summary: "{{fields.alt}}"
+        fields:
+          - { name: src, label: "Imagem", widget: image }
+          - { name: alt, label: "Descrição (texto alternativo)", widget: string, required: true, hint: "Descreva a imagem para quem usa leitor de tela. Obrigatório." }
+          - { name: caption, label: "Legenda (opcional)", widget: string, required: false }
+
+      # ABNT — para o acadêmico
+      - { name: abnt, label: "Referência (ABNT)", widget: text, required: false, hint: "Ex.: SOBRENOME, Nome. Título. Cidade: Editora, ano." }
+
+      - { name: body, label: "Conteúdo", widget: markdown }

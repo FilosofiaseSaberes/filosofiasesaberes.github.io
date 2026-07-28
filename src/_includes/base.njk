@@ -1,0 +1,92 @@
+{% set L = i18n[pageLang] %}
+<!DOCTYPE html>
+<html lang="{{ L.htmlLang }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if title %}{{ title }} · {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+<meta name="description" content="{{ L.tagline }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ '/assets/css/style.css' | url }}">
+<link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ (L.home + 'feed.xml') | url }}">
+</head>
+<body>
+<a href="#conteudo" class="skip">{{ L.skip }}</a>
+
+<div class="utility">
+  <div class="row">
+    <div class="langs" role="group" aria-label="Idioma / Idioma / Language">
+      <a href="{{ '/' | url }}" hreflang="pt" lang="pt" {% if pageLang=="pt" %}aria-current="true"{% endif %}>PT</a>
+      <a href="{{ '/es/' | url }}" hreflang="es" lang="es" {% if pageLang=="es" %}aria-current="true"{% endif %}>ES</a>
+      <a href="{{ '/en/' | url }}" hreflang="en" lang="en" {% if pageLang=="en" %}aria-current="true"{% endif %}>EN</a>
+    </div>
+    <button class="a11y-btn" id="a11yBtn" aria-expanded="false" aria-controls="a11yPanel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="7" r="1.2" fill="currentColor" stroke="none"/><path d="M6 10h12M12 10v7M12 13l-3 4M12 13l3 4" stroke-linecap="round"/></svg>
+      <span>{{ L.a11y_btn }}</span>
+    </button>
+    <div class="a11y-panel" id="a11yPanel" role="dialog" aria-label="{{ L.a11y_title }}" hidden>
+      <h2>{{ L.a11y_title }}</h2>
+      <div class="a11y-group"><span>{{ L.a11y_text }}</span>
+        <div class="seg"><button id="fsDown" aria-label="A-">A−</button><button id="fsReset">A</button><button id="fsUp" aria-label="A+">A+</button></div>
+      </div>
+      <div class="a11y-group"><button class="toggle" id="tContrast" aria-pressed="false">{{ L.a11y_contrast }}<span class="state" data-on="{{ L.on }}" data-off="{{ L.off }}">{{ L.off }}</span></button></div>
+      <div class="a11y-group"><button class="toggle" id="tLegible" aria-pressed="false">{{ L.a11y_legible }}<span class="state" data-on="{{ L.on }}" data-off="{{ L.off }}">{{ L.off }}</span></button></div>
+      <div class="a11y-group"><button class="toggle" id="tUnderline" aria-pressed="false">{{ L.a11y_underline }}<span class="state" data-on="{{ L.on }}" data-off="{{ L.off }}">{{ L.off }}</span></button></div>
+      <div class="a11y-group"><button class="toggle" id="tMotion" aria-pressed="false">{{ L.a11y_motion }}<span class="state" data-on="{{ L.on }}" data-off="{{ L.off }}">{{ L.off }}</span></button></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="mast">
+    <a href="{{ L.home | url }}" aria-label="{{ site.title }}">
+      <svg class="emblem" viewBox="0 0 100 100" role="img" aria-label="{{ site.title }}">
+        <g fill="none" stroke-linecap="round">
+          <circle cx="50" cy="50" r="45" stroke="#E4B84E" stroke-width="1.2"/>
+          <circle cx="50" cy="50" r="33" stroke="#3FBFB4" stroke-width="1"/>
+          <circle cx="50" cy="50" r="21" stroke="#E4B84E" stroke-width="1"/>
+          <circle cx="50" cy="50" r="6.5" fill="#E4B84E" stroke="none"/>
+          <g stroke="#E4B84E" stroke-width="1.2"><line x1="50" y1="2" x2="50" y2="9"/><line x1="50" y1="91" x2="50" y2="98"/><line x1="2" y1="50" x2="9" y2="50"/><line x1="91" y1="50" x2="98" y2="50"/></g>
+          <g stroke="#A992E0" stroke-width="1"><line x1="16" y1="16" x2="21" y2="21"/><line x1="84" y1="16" x2="79" y2="21"/><line x1="16" y1="84" x2="21" y2="79"/><line x1="84" y1="84" x2="79" y2="79"/></g>
+        </g>
+      </svg>
+    </a>
+    {%- set isHome = (page.url == L.home) %}
+    {% if isHome %}
+    <h1><a href="{{ L.home | url }}">Filosofias <span class="e">&amp;</span> Saberes</a></h1>
+    {% else %}
+    <p class="sitetitle"><a href="{{ L.home | url }}">Filosofias <span class="e">&amp;</span> Saberes</a></p>
+    {% endif %}
+    <p class="tag">{{ L.tagline }}</p>
+    <div class="starline"><span class="s" aria-hidden="true">✧</span></div>
+    <nav class="sections" aria-label="{{ L.index }}">
+      {% for key, labels in site.categories %}
+      <a href="{{ (L.home + 'secao/' + key + '/') | url }}">{{ labels[pageLang] }}</a>
+      {% endfor %}
+      <a href="{{ L.home | url }}">{{ L.archive }}</a>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+    {{ content | safe }}
+  </main>
+
+  {% if not noSubscribe %}{% include "subscribe.njk" %}{% endif %}
+
+  <footer>
+    <div class="fmark inscr">Filosofias &amp; Saberes</div>
+    <p class="fnote">{{ L.footer_note }}</p>
+    <nav class="fnav" aria-label="{{ L.about }}">
+      <a href="{{ (L.home + L.s_about + '/') | url }}">{{ L.about }}</a>
+      <a href="{{ (L.home + L.s_a11y + '/') | url }}">{{ L.accessibility }}</a>
+      <a href="{{ (L.home + L.s_contact + '/') | url }}">{{ L.contact }}</a>
+      <a href="{{ (L.home + 'feed.xml') | url }}">RSS</a>
+    </nav>
+  </footer>
+</div>
+<script>window.FES_API="{{ site.apiUrl }}";</script>
+<script src="{{ '/assets/js/main.js' | url }}"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% set LS = i18n[pageLang] %}
+<section class="subscribe" aria-labelledby="nh">
+  <h2 id="nh">{{ LS.news_title }}</h2>
+  <p>{{ LS.news_sub }}</p>
+  {% if site.newsletterUrl %}
+  <a class="news-btn" href="{{ site.newsletterUrl }}" target="_blank" rel="noopener">{{ LS.news_btn }}</a>
+  {% else %}
+  <p class="news-off eyebrow">{{ LS.news_off }}</p>
+  {% endif %}
+</section>
