@@ -1,53 +1,179 @@
 {% from "macros.njk" import catTag, fmtTag %}
 {% set L = i18n[pageLang] %}
 {% set posts = collections["posts_" + pageLang] %}
+
 {% set fmtLabels = {
-  texto:{pt:"Texto",es:"Texto",en:"Text"},
-  pdf:{pt:"PDF",es:"PDF",en:"PDF"},
-  video:{pt:"Vídeo · " + L.captions, es:"Video · " + L.captions, en:"Video · " + L.captions},
-  imagem:{pt:"Imagens · " + L.described, es:"Imágenes · " + L.described, en:"Images · " + L.described}
+  texto: {
+    pt: "Texto",
+    es: "Texto",
+    en: "Text"
+  },
+  pdf: {
+    pt: "PDF",
+    es: "PDF",
+    en: "PDF"
+  },
+  video: {
+    pt: "Vídeo · " + L.captions,
+    es: "Video · " + L.captions,
+    en: "Video · " + L.captions
+  },
+  imagem: {
+    pt: "Imagens · " + L.described,
+    es: "Imágenes · " + L.described,
+    en: "Images · " + L.described
+  }
 } %}
 
-<p class="issue-line eyebrow">{{ L.tagline }}</p>
+<p class="issue-line eyebrow">{{ L.home_intro }}</p>
 
 {% if posts and posts.length %}
-{% set feat = posts[0] %}
-<section class="featured" aria-labelledby="featTitle">
-  <div class="plate">
-    <svg viewBox="0 0 200 200" role="img" aria-label="Motivo cósmico">
-      <g fill="none" stroke-linecap="round">
-        <circle cx="100" cy="100" r="90" stroke="#E4B84E" stroke-width="2.4"/>
-        <circle cx="100" cy="100" r="66" stroke="#3FBFB4" stroke-width="2"/>
-        <circle cx="100" cy="100" r="42" stroke="#E4B84E" stroke-width="2"/>
-        <circle cx="100" cy="100" r="13" fill="#E4B84E" stroke="none"/>
-        <g stroke="#E4B84E" stroke-width="2.4"><line x1="100" y1="4" x2="100" y2="18"/><line x1="100" y1="182" x2="100" y2="196"/><line x1="4" y1="100" x2="18" y2="100"/><line x1="182" y1="100" x2="196" y2="100"/></g>
-        <g stroke="#A992E0" stroke-width="2"><line x1="32" y1="32" x2="42" y2="42"/><line x1="168" y1="32" x2="158" y2="42"/><line x1="32" y1="168" x2="42" y2="158"/><line x1="168" y1="168" x2="158" y2="158"/></g>
-      </g>
-    </svg>
-  </div>
-  <div>
-    {{ catTag(feat.data.category, site.categories[feat.data.category][pageLang], feat.date | shortdate(pageLang)) }}
-    <h2 id="featTitle"><a href="{{ feat.url | url }}">{{ feat.data.title }}</a></h2>
-    <p class="lede">{{ feat.data.excerpt }}</p>
-    {% if feat.data.abnt %}<div class="abnt"><span class="lbl">{{ L.abnt_label }}</span><p>{{ feat.data.abnt | safe }}</p></div>{% endif %}
-    <div class="meta">{{ fmtTag(feat.data.format, fmtLabels[feat.data.format][pageLang]) }}<a class="readmore" href="{{ feat.url | url }}">{{ L.readmore }}</a></div>
-  </div>
-</section>
+  {% set feat = posts[0] %}
 
-<div class="recent-head"><h3>{{ L.recent }}</h3><span class="eyebrow">{{ L.index }}</span></div>
-<div class="grid">
-  {% for post in posts %}
-    {% if loop.index > 1 %}
-    <article class="card" tabindex="0">
-      {{ catTag(post.data.category, site.categories[post.data.category][pageLang], post.date | shortdate(pageLang)) }}
-      <h4><a href="{{ post.url | url }}">{{ post.data.title }}</a></h4>
-      <p>{{ post.data.excerpt }}</p>
-      <div class="foot">{{ fmtTag(post.data.format, fmtLabels[post.data.format][pageLang]) }}</div>
-    </article>
-    {% endif %}
-  {% endfor %}
-</div>
+  <section class="featured" aria-labelledby="featTitle">
+    <div class="plate">
+      <svg
+        viewBox="0 0 200 200"
+        role="img"
+        aria-label="Motivo cósmico"
+      >
+        <g fill="none" stroke-linecap="round">
+          <circle
+            cx="100"
+            cy="100"
+            r="90"
+            stroke="#E4B84E"
+            stroke-width="2.4"
+          />
+
+          <circle
+            cx="100"
+            cy="100"
+            r="66"
+            stroke="#3FBFB4"
+            stroke-width="2"
+          />
+
+          <circle
+            cx="100"
+            cy="100"
+            r="42"
+            stroke="#E4B84E"
+            stroke-width="2"
+          />
+
+          <circle
+            cx="100"
+            cy="100"
+            r="13"
+            fill="#E4B84E"
+            stroke="none"
+          />
+
+          <g stroke="#E4B84E" stroke-width="2.4">
+            <line x1="100" y1="4" x2="100" y2="18"/>
+            <line x1="100" y1="182" x2="100" y2="196"/>
+            <line x1="4" y1="100" x2="18" y2="100"/>
+            <line x1="182" y1="100" x2="196" y2="100"/>
+          </g>
+
+          <g stroke="#A992E0" stroke-width="2">
+            <line x1="32" y1="32" x2="42" y2="42"/>
+            <line x1="168" y1="32" x2="158" y2="42"/>
+            <line x1="32" y1="168" x2="42" y2="158"/>
+            <line x1="168" y1="168" x2="158" y2="158"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div>
+      {{ catTag(
+        feat.data.category,
+        site.categories[feat.data.category][pageLang],
+        feat.date | shortdate(pageLang)
+      ) }}
+
+      <h2 id="featTitle">
+        <a href="{{ feat.url | url }}">
+          {{ feat.data.title }}
+        </a>
+      </h2>
+
+      <p class="lede">
+        {{ feat.data.excerpt }}
+      </p>
+
+      {% if feat.data.abnt %}
+        <div class="abnt">
+          <span class="lbl">{{ L.abnt_label }}</span>
+          <p>{{ feat.data.abnt | safe }}</p>
+        </div>
+      {% endif %}
+
+      <div class="meta">
+        {{ fmtTag(
+          feat.data.format,
+          fmtLabels[feat.data.format][pageLang]
+        ) }}
+
+        <a
+          class="readmore"
+          href="{{ feat.url | url }}"
+        >
+          {{ L.readmore }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="recent-head">
+    <h3>{{ L.recent }}</h3>
+    <span class="eyebrow">{{ L.index }}</span>
+  </div>
+
+  <div class="grid">
+    {% for post in posts %}
+      {% if loop.index > 1 %}
+        <article class="card" tabindex="0">
+          {{ catTag(
+            post.data.category,
+            site.categories[post.data.category][pageLang],
+            post.date | shortdate(pageLang)
+          ) }}
+
+          <h4>
+            <a href="{{ post.url | url }}">
+              {{ post.data.title }}
+            </a>
+          </h4>
+
+          <p>{{ post.data.excerpt }}</p>
+
+          <div class="foot">
+            {{ fmtTag(
+              post.data.format,
+              fmtLabels[post.data.format][pageLang]
+            ) }}
+          </div>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </div>
+
 {% else %}
-{% set emptyMsg = {pt:"Ainda não há publicações neste idioma.", es:"Aún no hay publicaciones en este idioma.", en:"No publications in this language yet."} %}
-<p class="issue-line eyebrow" style="border:none">— {{ emptyMsg[pageLang] }} —</p>
+
+  {% set emptyMsg = {
+    pt: "Ainda não há publicações neste idioma.",
+    es: "Aún no hay publicaciones en este idioma.",
+    en: "No publications in this language yet."
+  } %}
+
+  <p
+    class="issue-line eyebrow"
+    style="border:none"
+  >
+    — {{ emptyMsg[pageLang] }} —
+  </p>
+
 {% endif %}
