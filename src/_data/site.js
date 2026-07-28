@@ -5,7 +5,7 @@ module.exports = {
   url: "https://filosofiasesaberes.github.io",
   langs: ["pt","es","en"],
   // Cole aqui a URL do Worker (Cloudflare) — serve reações e comentários. Vazio = modo local.
-  apiUrl: "",
+  apiUrl: "https://filosofias-saberes.filosofiasesaberes.workers.dev",
   // Link da página de assinatura do seu serviço de e-mail (MailerLite, beehiiv...). Vazio = oculto.
   newsletterUrl: "",
   // rótulos das seções por idioma
