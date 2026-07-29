@@ -4,7 +4,7 @@ lang: pt
 date: 2026-07-28
 category: ensaios
 format: texto
-excerpt: Um expressão livre, nesse início de movimento...
+excerpt: Uma expressão livre, nesse início de movimento...
 pdf: ''
 video: ''
 transcript: ''
