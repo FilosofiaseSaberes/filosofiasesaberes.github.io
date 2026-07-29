@@ -31,7 +31,13 @@
   {% set feat = posts[0] %}
 
   <section class="featured" aria-labelledby="featTitle">
-    <div class="plate">
+    {% set cover = feat.data.gallery[0] if feat.data.gallery and feat.data.gallery.length else null %}
+  {% if cover %}
+  <a class="plate plate-cover" href="{{ feat.url | url }}">
+    <img src="{{ cover.src | url }}" alt="{{ cover.alt or feat.data.title }}" loading="lazy">
+  </a>
+  {% else %}
+  <div class="plate">
       <svg
         viewBox="0 0 200 200"
         role="img"
@@ -86,6 +92,7 @@
         </g>
       </svg>
     </div>
+  {% endif %}
 
     <div>
       {{ catTag(
