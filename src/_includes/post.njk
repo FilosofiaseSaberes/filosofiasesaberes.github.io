@@ -17,19 +17,19 @@ noSubscribe: true
   <h1>{{ title }}</h1>
   <p class="post-meta">{{ fmtLabels[format][pageLang] }}{% if format=="video" %} · {{ L.captions }}{% elif format=="imagem" %} · {{ L.described }}{% endif %}</p>
 
-  {% if format=="video" and video %}
+  {% if video %}
     <div class="embed"><iframe src="{{ video }}" title="{{ title }}" loading="lazy" allowfullscreen></iframe></div>
     {% if transcript %}<details class="transcript"><summary>{{ L.transcript }}</summary><div>{{ transcript | safe }}</div></details>{% endif %}
   {% endif %}
 
-  {% if format=="pdf" and pdf %}
+  {% if pdf %}
     <object class="pdf-frame" data="{{ pdf | url }}" type="application/pdf" aria-label="{{ title }}">
       <p><a class="readmore" href="{{ pdf | url }}">{{ L.readmore }} (PDF)</a></p>
     </object>
     <p class="dl"><a class="readmore" href="{{ pdf | url }}" download>↓ PDF</a></p>
   {% endif %}
 
-  {% if format=="imagem" and gallery %}
+  {% if gallery and gallery.length %}
     <div class="gallery">
       {% for img in gallery %}
       <figure><img src="{{ img.src | url }}" alt="{{ img.alt }}" loading="lazy">{% if img.caption %}<figcaption>{{ img.caption }}</figcaption>{% endif %}</figure>
