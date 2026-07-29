@@ -1,15 +1,8 @@
 {% set LS = i18n[pageLang] %}
-{% set newsletterUrl = site.newsletterUrl[pageLang] %}
-
 <section class="subscribe" aria-labelledby="nh">
   <h2 id="nh">{{ LS.news_title }}</h2>
   <p>{{ LS.news_sub }}</p>
-
-  {% if newsletterUrl %}
-  <a class="news-btn" href="{{ newsletterUrl | url }}">
-    {{ LS.news_btn }}
-  </a>
-  {% else %}
-  <p class="news-off eyebrow">{{ LS.news_off }}</p>
-  {% endif %}
+  <div class="news-form" style="max-width:520px;margin:16px auto 0">
+    {% include "newsletter.njk" %}
+  </div>
 </section>
