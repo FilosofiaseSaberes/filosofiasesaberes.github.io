@@ -211,3 +211,8 @@ html[data-legible="on"] .subscribe p{font-style:normal}
 .contact-mail{font-family:"IBM Plex Mono",monospace;font-size:calc((16px) * var(--fs));color:var(--turq);word-break:break-all}
 .contact-mail a{color:var(--turq);text-decoration:none;border-bottom:1px solid var(--turq)}
 .contact-mail a:hover{color:var(--gold);border-color:var(--gold)}
+
+/* capa do destaque com imagem real */
+.plate-cover{padding:0;display:block;overflow:hidden}
+.plate-cover img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+.plate-cover:hover img{transform:scale(1.03)}
